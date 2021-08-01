@@ -225,7 +225,8 @@ class PresentationUploader extends Component {
       disableActions: false,
       toUploadCount: 0,
     };
-
+    
+    this.defaultPresentationId = null;
     this.toastId = null;
     this.hasError = null;
 
@@ -273,6 +274,7 @@ class PresentationUploader extends Component {
     // set as selectedToBeNextCurrentOnConfirm once upload / coversion complete
     if (presentations.length === 0 && propPresentations.length === 1) {
       if (propPresentations[0].upload.done && propPresentations[0].conversion.done) {
+        this.defaultPresentationId = propPresentations[0].id;
         return this.setState({
           presentations: propPresentations,
         }, Session.set('selectedToBeNextCurrent', propPresentations[0].id));
@@ -302,7 +304,7 @@ class PresentationUploader extends Component {
   isDefault(presentation) {
     const { defaultFileName } = this.props;
     return presentation.filename === defaultFileName
-      && !presentation.id.includes(defaultFileName);
+      && presentation.id === this.defaultPresentationId;
   }
 
   handleDismissToast() {
